@@ -6,49 +6,78 @@ import { auth } from "@/firebase/init";
 import { setUser } from "../store/auth";
 import { useRouter } from "next/navigation";
 
-// Simple hook that gives you everything you need
+/**
+ * useAuth Hook - Main authentication hook for the app
+ * 
+ * This hook provides:
+ * - Current user data and login status
+ * - Loading states for auth operations
+ * - Error messages from auth operations
+ * - Modal visibility states
+ * - Automatic Firebase auth state synchronization
+ * 
+ * @returns Object containing all auth-related state and computed values
+ */
 export function useAuth() {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  // Get data from Redux store
-  const user = useAppSelector((state) => state.auth.user);
-  const isLoading = useAppSelector((state) => state.auth.isLoading);
-  const error = useAppSelector((state) => state.auth.error);
-  const isLoginOpen = useAppSelector((state) => state.auth.isLoginOpen);
-  const isSignupOpen = useAppSelector((state) => state.auth.isSignupOpen);
+  /**
+   * REDUX STATE SELECTORS - Get auth data from Redux store
+   * These automatically update when auth state changes
+   */
+  const user = useAppSelector((state) => state.auth.user);           // Current user object
+  const isLoading = useAppSelector((state) => state.auth.isLoading); // Loading state for async operations
+  const isInitializing = useAppSelector((state) => state.auth.isInitializing); // Loading state for initial auth check
+  const error = useAppSelector((state) => state.auth.error);         // Error messages
+  const isLoginOpen = useAppSelector((state) => state.auth.isLoginOpen);   // Login modal visibility
+  const isSignupOpen = useAppSelector((state) => state.auth.isSignupOpen); // Signup modal visibility
 
-  // Check if user is logged in
-  const isLoggedIn = !!user;
+  /**
+   * COMPUTED VALUES - Derived from current state
+   */
+  const isLoggedIn = !!user;  // Boolean: true if user exists, false if null
 
-  // Listen to Firebase auth state changes
+  /**
+   * FIREBASE AUTH STATE LISTENER - Automatically sync with Firebase
+   * This effect runs once when the component mounts and sets up a listener
+   * that automatically updates Redux state when Firebase auth state changes
+   */
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       if (firebaseUser) {
-        // Convert Firebase user to our simple User type
+        // User is logged in - convert Firebase user to our User type
         const user = {
           uid: firebaseUser.uid,
           email: firebaseUser.email || "",
           displayName: firebaseUser.displayName || "",
           photoURL: firebaseUser.photoURL || "",
         };
-        dispatch(setUser(user));
-        console.log("User logged in")
-        console.log(user)
+        dispatch(setUser(user));  // Update Redux state with user data
       } else {
+        // User is logged out - clear user from state
         dispatch(setUser(null));
       }
     });
+    
+    // Return cleanup function to unsubscribe when component unmounts
     return unsubscribe;
   }, [dispatch]);
 
+  /**
+   * RETURN VALUES - All auth-related state and computed values
+   * Components can destructure these values as needed
+   */
   return {
-    // Data
-    user,
-    isLoggedIn,
-    isLoading,
-    error,
-    isLoginOpen,
-    isSignupOpen,
+    // Core auth data
+    user,           // Current user object (null if not logged in)
+    isLoggedIn,     // Boolean login status
+    isLoading,      // Loading state for async operations
+    isInitializing, // Loading state for initial auth check
+    error,          // Error messages from auth operations
+    
+    // UI state
+    isLoginOpen,    // Login modal visibility
+    isSignupOpen,   // Signup modal visibility
   };
 }

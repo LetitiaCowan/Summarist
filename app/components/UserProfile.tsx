@@ -3,7 +3,6 @@ import React from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { useAuthActions } from "../../hooks/useAuthActions";
 
-// Example component showing how simple it is to use
 export default function UserProfile() {
   const { user, isLoggedIn, isLoading, error } = useAuth();
   const { logout, openLogin, openSignup } = useAuthActions();

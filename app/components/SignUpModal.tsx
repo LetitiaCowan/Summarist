@@ -7,9 +7,12 @@ interface SignUpModalProps {
   handleGoogleSignup: () => void;
   handleEmailSignup: (email: string, password: string, confirmPassword: string) => void;
   switchToLogin?: () => void;
+  error?: string | null;
+  clearError?: () => void;
+  isLoading?: boolean;
 }
 
-export default function SignUpModal({ setIsOpen, handleGoogleSignup, handleEmailSignup, switchToLogin }: SignUpModalProps) {
+export default function SignUpModal({ setIsOpen, handleGoogleSignup, handleEmailSignup, switchToLogin, error, clearError, isLoading }: SignUpModalProps) {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -23,6 +26,12 @@ export default function SignUpModal({ setIsOpen, handleGoogleSignup, handleEmail
     }
     
     handleEmailSignup(email, password, confirmPassword);
+  };
+
+  const handleInputChange = () => {
+    if (clearError) {
+      clearError();
+    }
   };
 
   return (
@@ -42,6 +51,21 @@ export default function SignUpModal({ setIsOpen, handleGoogleSignup, handleEmail
         <p className="text-gray-600 text-center mb-6">
           Join Summarist and start your reading journey
         </p>
+
+        {/* ERROR MESSAGE */}
+        {error && (
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg relative">
+            <p className="text-red-600 text-sm text-center">{error}</p>
+            {clearError && (
+              <button
+                onClick={clearError}
+                className="absolute top-1 right-1 text-red-400 hover:text-red-600 text-sm"
+              >
+                ×
+              </button>
+            )}
+          </div>
+        )}
 
         {/* GOOGLE SIGNUP BUTTON */}
         <button 
@@ -78,6 +102,7 @@ export default function SignUpModal({ setIsOpen, handleGoogleSignup, handleEmail
               placeholder="Enter your email"
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
+              onChange={handleInputChange}
             />
           </div>
           
@@ -96,6 +121,7 @@ export default function SignUpModal({ setIsOpen, handleGoogleSignup, handleEmail
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
               minLength={6}
+              onChange={handleInputChange}
             />
           </div>
 
@@ -114,14 +140,16 @@ export default function SignUpModal({ setIsOpen, handleGoogleSignup, handleEmail
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
               minLength={6}
+              onChange={handleInputChange}
             />
           </div>
 
           <button
             type="submit"
-            className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200"
+            disabled={isLoading}
+            className="w-full bg-green-600 hover:bg-green-700 disabled:bg-green-400 disabled:cursor-not-allowed text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200"
           >
-            Create Account
+            {isLoading ? "Creating Account..." : "Create Account"}
           </button>
         </form>
 

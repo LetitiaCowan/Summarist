@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Override Tailwind's box-sizing after utilities are loaded */
+/* Force box-sizing with !important to override Tailwind */
+*, *::before, *::after {
+  box-sizing: border-box !important;
+}
+
+/* Ensure Tailwind utility classes also use border-box */
+[class*="p-"], [class*="px-"], [class*="py-"], [class*="pt-"], [class*="pb-"], [class*="pl-"], [class*="pr-"],
+[class*="m-"], [class*="mx-"], [class*="my-"], [class*="mt-"], [class*="mb-"], [class*="ml-"], [class*="mr-"],
+[class*="w-"], [class*="h-"], [class*="max-w-"], [class*="max-h-"], [class*="min-w-"], [class*="min-h-"] {
+  box-sizing: border-box !important;
+}
+
+/* Specific fix for the nav layout */
+nav, nav *, nav span, nav ul, nav li {
+  box-sizing: border-box !important;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -14,10 +32,11 @@
   }
 }
 
+
+/* Reset margin and padding */
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
   font-family: "Roboto", sans-serif;
 }
 
