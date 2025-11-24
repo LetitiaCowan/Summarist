@@ -20,6 +20,7 @@ export interface User {
   email: string; // User's email address
   displayName: string; // User's display name
   photoURL?: string; // Optional profile photo URL
+  plan: string; // User's plan
 }
 
 /**
@@ -58,6 +59,7 @@ const createUser = (firebaseUser: any): User => ({
   email: firebaseUser.email || "",
   displayName: firebaseUser.displayName || "",
   photoURL: firebaseUser.photoURL || "",
+  plan: firebaseUser.plan || "",
 });
 
 /**

@@ -1,8 +1,11 @@
 import React from 'react'
+import BooksClientWrapper from '../components/clientWrappers/BooksClientWrapper'
 
 const Library = () => {
   return (
-    <div>Library</div>
+    <div>
+      <BooksClientWrapper />
+    </div>
   )
 }
 
