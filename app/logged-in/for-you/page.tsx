@@ -1,12 +1,12 @@
 import React from "react";
 import SelectedBooks from "./components/SelectedBooks";
-import ClientWrapper from "./components/ClientWrapper";
+import BooksClientWrapper from "../components/clientWrappers/BooksClientWrapper";
 
 const ForYou = () => {
   return (
-    <div className="p-10 ">
+    <div>
       <SelectedBooks />
-      <ClientWrapper />
+      <BooksClientWrapper />
       
     </div>
   );

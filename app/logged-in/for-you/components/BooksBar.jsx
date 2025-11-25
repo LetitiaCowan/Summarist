@@ -7,7 +7,7 @@ const BooksBar = ({ books }) => {
   return (
     <div className="flex flex-row gap-2 flex-wrap">
       {books.slice(0, 5).map((book) => (
-        <Link href={`/logged-in/book-info?id=${book.id}`} key={book.id} className="flex flex-col flex-1 min-w-0 gap-2  hover:bg-gray-200">
+        <Link href={`/logged-in/book-info?id=${book.id}`} key={book.id} className="flex flex-col flex-1 min-w-0 max-w-[198px] gap-2  hover:bg-gray-200">
           <img
             src={book.imageLink}
             alt={book.title}

@@ -1,19 +1,20 @@
-"use client";
 import React from "react";
 import Link from "next/link";
 import logo from "../assets/logo.png";
 import Logout from "./components/Logout";
-import { useAuthRedirect } from "@/hooks/useAuthRedirect";
-
+import AuthClientWrapper from "./components/clientWrappers/AuthClientWrapper";
+import { BookDataProvider } from "../providers/BookDataProvider";
 
 export default function LoggedInLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  useAuthRedirect();
-
+   
   return (
+    <>
+    <AuthClientWrapper />
+    <BookDataProvider>
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
       <span className="w-full max-w-[256px]"></span>
@@ -50,7 +51,9 @@ export default function LoggedInLayout({
       </nav>
 
       {/* Main content */}
-      <main className="flex-1 p-10">{children}</main>
+      <main className="row flex-1 ">{children}</main>
     </div>
+    </BookDataProvider>
+    </>
   );
 }
