@@ -11,7 +11,7 @@ interface ModalProps {
 
 export default function Modal({ setIsOpen }: ModalProps) {
   const { user, isLoading, error } = useAuth();
-  const { login, loginWithGoogle, openSignup, clearError } = useAuthActions();
+  const { login, loginWithGoogle, openSignup, clearError, loginAnonymously } = useAuthActions();
   const [showPasswordReset, setShowPasswordReset] = useState(false);
 
   const handleGoogleLogin = () => {
@@ -26,9 +26,8 @@ export default function Modal({ setIsOpen }: ModalProps) {
     clearError(); // Clear any existing errors when switching to signup
     openSignup();
   };
-
   const handleGuestLogin = () => {
-    login("guest@gmail.com", "guest123");
+    loginAnonymously(); // Use the new anonymous auth
   };
 
   const handleForgotPassword = () => {

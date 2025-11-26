@@ -12,23 +12,23 @@ const BookClientWrapper = () => {
   const { openLogin } = useAuthActions();
   const { user, isLoggedIn } = useAuth();
   const router = useRouter();
-  const uid = user?.uid;
   const searchParams = useSearchParams();
-  const guest = "tiOfFCBiZ2fy05LZhoulaz3TGk13"
   const id = searchParams.get("id");
   const { findBookById, loading } = useBookDataContext();
   const book = findBookById(id);
- 
+
+  // Check if user is anonymous (anonymous users have no email)
+  const isGuest = user && !user.email;
 
   const handleLogin = () => {
-    if (uid === guest) {
+    // If user is anonymous (guest), prompt them to login
+    if (isGuest) {
       openLogin();
       return;
     }
-    return
   };
+  console.log(user?.plan);
 
-  const isGuest = uid === guest;
 
   const handleReadListen = (action) => {
 
@@ -36,8 +36,7 @@ const BookClientWrapper = () => {
     const requiresSubscription = book?.subscriptionRequired; // Note: keeping the typo from the interface
     
     // For now, we'll assume user is not subscribed (you can implement subscription check later)
-    const isSubscribed = false; // TODO: Implement actual subscription check
-
+    const isSubscribed = user?.plan === 'premium' || user?.plan === 'basic';
     if (requiresSubscription && !isSubscribed) {
       // Redirect to choose plan page
       router.push("/logged-in/chosen-plan");
