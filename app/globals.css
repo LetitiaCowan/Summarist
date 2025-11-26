@@ -81,6 +81,8 @@ button:disabled {
 .container {
   padding: 40px 0;
   width: 100%;
+  max-width: 1070px;
+  margin: 0 auto;
 }
 
 .btn {
@@ -166,6 +168,9 @@ button:disabled {
 }
 
 /* LANDING */
+
+
+
 .landing__wrapper {
   display: flex;
 }

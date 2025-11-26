@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { auth } from "@/firebase/init";
+import { signInAnonymously } from "firebase/auth";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -107,6 +108,15 @@ export const loginWithGoogle = createAsyncThunk(
   async () => {
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
+    return createUser(result.user);
+  }
+);
+
+// Add this new async thunk after loginWithGoogle
+export const loginAnonymously = createAsyncThunk(
+  "auth/loginAnonymously",
+  async () => {
+    const result = await signInAnonymously(auth);
     return createUser(result.user);
   }
 );
@@ -320,6 +330,21 @@ const authSlice = createSlice({
         state.user = null; // Clear user data
         state.isLoading = false; // Stop loading
         state.isLoggedIn = false; // Mark as logged out
+      })
+
+      .addCase(loginAnonymously.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(loginAnonymously.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.user = action.payload;
+        state.isLoginOpen = false;
+        state.isLoggedIn = true;
+      })
+      .addCase(loginAnonymously.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message || "Anonymous login failed";
       });
   },
 });

@@ -10,6 +10,7 @@ import {
   closeModals,
   clearError,
   resetPassword,
+  loginAnonymously,
 } from "../store/auth";
 
 /**
@@ -58,6 +59,10 @@ export function useAuthActions() {
      */
     loginWithGoogle: () => {
       dispatch(loginWithGoogle());
+    },
+
+    loginAnonymously: () => {
+      dispatch(loginAnonymously());
     },
 
     /**

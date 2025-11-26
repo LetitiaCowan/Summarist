@@ -1,8 +1,11 @@
 import React from 'react'
+import ClientSettingsWrapper from './components/ClientSettingsWrapper'
 
 const Settings = () => {
   return (
-    <div>Settings</div>
+    <div>
+      <ClientSettingsWrapper />
+    </div>
   )
 }
 

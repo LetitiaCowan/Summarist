@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "../store/store";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/firebase/init";
-import { setUser } from "../store/auth";
+import { setUser, User } from "../store/auth";
 import { useRouter } from "next/navigation";
 
 /**
@@ -47,11 +47,12 @@ export function useAuth() {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       if (firebaseUser) {
         // User is logged in - convert Firebase user to our User type
-        const user = {
+        const user: User = {
           uid: firebaseUser.uid,
           email: firebaseUser.email || "",
           displayName: firebaseUser.displayName || "",
           photoURL: firebaseUser.photoURL || "",
+          plan: "", // Set to empty string for now - will be fetched from Firestore later
         };
         dispatch(setUser(user));  // Update Redux state with user data
       } else {
