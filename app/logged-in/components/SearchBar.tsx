@@ -1,8 +1,9 @@
 "use client";
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
-const SearchBar = () => {
+// Inner component that uses useSearchParams
+const SearchBarContent = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
   const pathname = usePathname();
@@ -82,6 +83,19 @@ const SearchBar = () => {
         </div>
       </form>
     </div>
+  );
+};
+
+// Outer wrapper component
+const SearchBar = () => {
+  return (
+    <Suspense fallback={
+      <div className="w-full max-w-2xl mx-auto mb-4 md:mb-6 px-4 md:px-0">
+        <div className="w-full px-4 py-2 md:py-3 pl-10 md:pl-12 pr-4 bg-white border border-gray-300 rounded-lg h-10 md:h-12"></div>
+      </div>
+    }>
+      <SearchBarContent />
+    </Suspense>
   );
 };
 
