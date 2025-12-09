@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useAuthActions } from "@/hooks/useAuthActions";
 import AuthModalWrapper from "../../../components/AuthModalWrapper";
 import { useBookDataContext } from '@/app/providers/BookDataProvider';
+import BookInfoSkeleton from "@/app/components/skeletons/BookInfoSkeleton";
 
 const BookClientWrapper = () => {
   const { openLogin } = useAuthActions();
@@ -14,52 +15,44 @@ const BookClientWrapper = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
+  
+  // Sanitize ID to prevent XSS and invalid characters
+  const sanitizeId = (id) => {
+    if (!id) return null;
+    return id.replace(/[^a-zA-Z0-9_-]/g, '');
+  };
+  
+  const sanitizedId = sanitizeId(id);
   const { findBookById, loading } = useBookDataContext();
-  const book = findBookById(id);
+  const book = sanitizedId ? findBookById(sanitizedId) : null;
 
-  // Check if user is anonymous (anonymous users have no email)
   const isGuest = user && !user.email;
 
   const handleLogin = () => {
-    // If user is anonymous (guest), prompt them to login
     if (isGuest) {
       openLogin();
       return;
     }
   };
-  console.log(user?.plan);
-
 
   const handleReadListen = (action) => {
+    if (!book || !book.id) return;
 
-    // Check if book requires subscription
-    const requiresSubscription = book?.subscriptionRequired; // Note: keeping the typo from the interface
-    
-    // For now, we'll assume user is not subscribed (you can implement subscription check later)
+    const requiresSubscription = book?.subscriptionRequired;
     const isSubscribed = user?.plan === 'premium' || user?.plan === 'basic';
+    
     if (requiresSubscription && !isSubscribed) {
-      // Redirect to choose plan page
       router.push("/logged-in/chosen-plan");
     } else {
-      // Redirect to player page with book ID
-      router.push(`/logged-in/player?id=${book.id}`);
+      const safeBookId = sanitizeId(book.id);
+      if (safeBookId) {
+        router.push(`/logged-in/player?id=${encodeURIComponent(safeBookId)}`);
+      }
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        Loading...
-      </div>
-    );
-  }
-
-  if (!book) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        Book not found
-      </div>
-    );
+  if (loading || !book) {
+    return <BookInfoSkeleton />;
   }
 
   return (

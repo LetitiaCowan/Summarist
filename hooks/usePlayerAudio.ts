@@ -1,3 +1,7 @@
+/**
+ * Custom hook managing audio playback state and controls.
+ * Handles play/pause, seeking, progress tracking, and drag interactions.
+ */
 import { useRef, useState, useEffect } from "react";
 
 interface UseAudioPlayerProps {
@@ -12,14 +16,12 @@ export const useAudioPlayer = ({ audioLink }: UseAudioPlayerProps) => {
   const [duration, setDuration] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
 
-  // Load audio when audioLink changes
   useEffect(() => {
     if (audioRef.current && audioLink) {
       audioRef.current.src = audioLink;
     }
   }, [audioLink]);
 
-  // Handle play/pause
   const togglePlayPause = () => {
     if (audioRef.current) {
       if (isPlaying) {
@@ -31,7 +33,6 @@ export const useAudioPlayer = ({ audioLink }: UseAudioPlayerProps) => {
     }
   };
 
-  // Handle seeking forward/backward
   const seekForward = () => {
     if (audioRef.current) {
       audioRef.current.currentTime += 10;
@@ -44,27 +45,24 @@ export const useAudioPlayer = ({ audioLink }: UseAudioPlayerProps) => {
     }
   };
 
-  // Update current time as audio plays (only when not dragging)
+  // Prevent time updates during drag to avoid jittery UI
   const handleTimeUpdate = () => {
     if (audioRef.current && !isDragging) {
       setCurrentTime(audioRef.current.currentTime);
     }
   };
 
-  // Set duration when audio metadata loads
   const handleLoadedMetadata = () => {
     if (audioRef.current) {
       setDuration(audioRef.current.duration);
     }
   };
 
-  // Handle when audio ends
   const handleEnded = () => {
     setIsPlaying(false);
     setCurrentTime(0);
   };
 
-  // Calculate the new time based on mouse position
   const calculateNewTime = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!progressBarRef.current || !audioRef.current || duration === 0) return;
     
@@ -76,7 +74,6 @@ export const useAudioPlayer = ({ audioLink }: UseAudioPlayerProps) => {
     return Math.max(0, Math.min(newTime, duration));
   };
 
-  // Handle mouse click on progress bar
   const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const newTime = calculateNewTime(e);
     if (audioRef.current && newTime !== undefined) {
@@ -85,7 +82,6 @@ export const useAudioPlayer = ({ audioLink }: UseAudioPlayerProps) => {
     }
   };
 
-  // Handle mouse down on progress bar (start dragging)
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     setIsDragging(true);
     const newTime = calculateNewTime(e);
@@ -95,7 +91,6 @@ export const useAudioPlayer = ({ audioLink }: UseAudioPlayerProps) => {
     }
   };
 
-  // Handle mouse move while dragging
   const handleMouseMove = (e: MouseEvent) => {
     if (!isDragging || !progressBarRef.current || !audioRef.current || duration === 0) return;
     
@@ -109,12 +104,11 @@ export const useAudioPlayer = ({ audioLink }: UseAudioPlayerProps) => {
     setCurrentTime(clampedTime);
   };
 
-  // Handle mouse up (stop dragging)
   const handleMouseUp = () => {
     setIsDragging(false);
   };
 
-  // Add/remove global mouse event listeners for dragging
+  // Global mouse listeners for drag interactions beyond progress bar boundaries
   useEffect(() => {
     if (isDragging) {
       document.addEventListener('mousemove', handleMouseMove);
@@ -127,7 +121,6 @@ export const useAudioPlayer = ({ audioLink }: UseAudioPlayerProps) => {
     };
   }, [isDragging, duration]);
 
-  // Format time in MM:SS format
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);

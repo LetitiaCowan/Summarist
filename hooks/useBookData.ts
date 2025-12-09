@@ -1,4 +1,8 @@
 "use client";
+/**
+ * Hook managing book data state: fetching from API, localStorage persistence, and library management.
+ * Handles recommended, suggested, and saved books.
+ */
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Book } from "@/app/types/book";
@@ -10,19 +14,17 @@ export function useBookData() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Load saved books from localStorage on mount
   useEffect(() => {
     const savedBooksFromStorage = localStorage.getItem("savedBooks");
     if (savedBooksFromStorage) {
       try {
         setSavedBooks(JSON.parse(savedBooksFromStorage));
       } catch (error) {
-        console.error("Error parsing saved books from localStorage:", error);
+        setSavedBooks([]);
       }
     }
   }, []);
 
-  // Save to localStorage whenever savedBooks changes
   useEffect(() => {
     if (savedBooks.length > 0) {
       localStorage.setItem("savedBooks", JSON.stringify(savedBooks));
@@ -39,7 +41,6 @@ export function useBookData() {
 
   const addToLibrary = (book: Book) => {
     setSavedBooks((prev) => {
-      // Check if book is already saved to avoid duplicates
       if (prev.some((b) => b.id === book.id)) {
         return prev;
       }
@@ -50,7 +51,6 @@ export function useBookData() {
   const removeFromLibrary = (bookId: string) => {
     setSavedBooks((prev) => {
       const newSavedBooks = prev.filter((b) => b.id !== bookId);
-      // Update localStorage immediately
       localStorage.setItem("savedBooks", JSON.stringify(newSavedBooks));
       return newSavedBooks;
     });
@@ -80,12 +80,7 @@ export function useBookData() {
         }
       } catch (err) {
         if (!cancel) {
-          if (err instanceof Error) {
-            setError(err.message);
-          } else {
-            // handle non-Error cases
-            setError(String(err));
-          }
+          setError("Unable to load books. Please try again.");
         }
       } finally {
         if (!cancel) setLoading(false);
@@ -93,6 +88,7 @@ export function useBookData() {
     }
 
     fetchData();
+    // Cancel request if component unmounts
     return () => {
       cancel = true;
     };

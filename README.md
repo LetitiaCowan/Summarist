@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Summarist
 
-## Getting Started
+A web app for reading and listening to book summaries. The idea is to help people get the key insights from books without having to read the whole thing. Users can browse recommended titles, search for specific books, save favorites to their library, and listen to audio summaries on the go.
 
-First, run the development server:
+## What it does
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Summarist pulls book summaries from a Firebase backend and presents them in a clean interface. Users can:
+- Browse curated recommended and suggested book lists
+- Search through the library by title, author, or keywords
+- Save books to a personal library (stored in localStorage for now)
+- Read full summaries with book descriptions and author info
+- Listen to audio summaries with a custom audio player
+- Access different content tiers based on subscription (Basic/Premium)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The subscription system is set up but payment processing isn't fully integrated yet. Authentication works with email/password, Google OAuth, and anonymous guest access.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Tech stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Next.js 15 (App Router)** - Chose this for the built-in routing, server components, and good performance out of the box. The App Router makes it easy to organize pages and handle client/server boundaries.
 
-## Learn More
+**React 19** - Latest React version. Using hooks throughout for state management and side effects.
 
-To learn more about Next.js, take a look at the following resources:
+**Redux Toolkit** - Needed global state for auth (user, login status, modals). Redux Toolkit makes it way less boilerplate-heavy than vanilla Redux. Auth state syncs with Firebase automatically.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**Firebase (Auth + Firestore)** - Firebase Auth handles all the authentication (email, Google, anonymous). Firestore would be for user data if its expanded later. Firebase was chosen because it's quick to set up and handles the bulk of the security/auth complexity.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Tailwind CSS** - For styling. Makes it fast to build responsive UI without writing custom CSS. The utility classes work well with the component-based structure.
 
-## Deploy on Vercel
+**TypeScript** - Type safety to catch errors prior to runtime. (specifically with Redux and Firebase)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Axios** - Simple HTTP client for fetching book data from the Cloud Functions.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Key features
+
+- **Book discovery** - Recommended and suggested book lists fetched from Firebase Cloud Functions
+- **Search** - Debounced search that navigates to results page, with input sanitization
+- **Personal library** - Save/remove books, persisted in localStorage
+- **Audio player** - Custom hook managing playback, seeking, progress tracking, and drag interactions
+- **Authentication** - Email/password, Google OAuth, and anonymous guest mode
+- **Subscription tiers** - UI for Basic and Premium plans (payment not wired up)
+- **Responsive design** - Works on mobile, tablet, and desktop
+- **Guest mode** - Anonymous users can browse but get prompted to login for certain actions

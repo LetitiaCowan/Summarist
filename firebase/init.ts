@@ -1,3 +1,7 @@
+/**
+ * Firebase initialization and service exports.
+ * Configures Firebase app, auth, Firestore, and storage using environment variables.
+ */
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";

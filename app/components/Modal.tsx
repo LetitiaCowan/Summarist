@@ -37,16 +37,16 @@ export default function Modal({ setIsOpen }: ModalProps) {
 
   return (
     <>
-      <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-        <div className="bg-white rounded-lg p-8 w-full max-w-md mx-4 relative">
+      <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50 p-4">
+        <div className="bg-white rounded-lg p-4 sm:p-6 md:p-8 w-full max-w-md relative max-h-[90vh] overflow-y-auto">
           <button
-            className="absolute top-2 right-2 text-gray-500 text-xl font-bold"
+            className="absolute top-2 right-2 sm:top-4 sm:right-4 text-gray-500 hover:text-gray-700 text-xl sm:text-2xl font-bold transition-colors"
             onClick={() => setIsOpen(false)}
           >
             ×
           </button>
 
-          <h2 className="text-2xl font-bold mb-4 text-center">
+          <h2 className="text-xl sm:text-2xl font-bold mb-4 text-center">
             Log in to Summarist
           </h2>
 
@@ -82,10 +82,10 @@ export default function Modal({ setIsOpen }: ModalProps) {
 
           <button
             onClick={handleGoogleLogin}
-            className=" relative w-full bg-[#4285f4] text-white font-medium py-3 px-4 rounded-lg flex items-center justify-center mb-4 hover:bg-[#357ae8] transition-colors duration-200"
+            className="relative w-full bg-[#4285f4] text-white font-medium py-2.5 sm:py-3 px-4 rounded-lg flex items-center justify-center mb-4 hover:bg-[#357ae8] transition-colors duration-200 text-sm sm:text-base"
           >
-            <span className="flex items-center justify-center w-8 h-8 absolute left-4 top-1/2 -translate-y-1/2 bg-white rounded-full">
-              <img src={google.src} alt="Google" className="w-5 h-5" />
+            <span className="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 bg-white rounded-full">
+              <img src={google.src} alt="Google" className="w-4 h-4 sm:w-5 sm:h-5" />
             </span>
             Continue with Google
           </button>

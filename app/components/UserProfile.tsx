@@ -12,7 +12,7 @@ export default function UserProfile() {
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div>An error occurred. Please try again.</div>;
   }
 
   if (!isLoggedIn) {
@@ -29,7 +29,7 @@ export default function UserProfile() {
     <div>
       <h2>Welcome, {user?.displayName || user?.email}!</h2>
       <p>Email: {user?.email}</p>
-      <p>UID: {user?.uid}</p>
+      {/* Removed UID display for security - UID should not be exposed to users */}
       {user?.photoURL && <img src={user.photoURL} alt="Profile" />}
       <button onClick={logout}>Logout</button>
     </div>
