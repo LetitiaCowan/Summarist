@@ -14,8 +14,8 @@ const BooksClientWrapper = () => {
 
   if (isLibraryRoute) {
     return (
-      <div className="px-4 md:px-0">
-        <div className="mt-6 md:mt-10">
+      <div>
+        <div>
           <h1 className="text-xl sm:text-2xl font-bold">Saved Books</h1>
           <p className="text-sm sm:text-base text-gray-600 mt-1">Books you've saved to your library</p>
           {loading ? (

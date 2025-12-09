@@ -2,7 +2,11 @@
 import React from "react";
 import { useAuthActions } from "@/hooks/useAuthActions";
 
-const Logout = () => {
+  interface LogoutProps {
+  icon?: React.ReactNode;
+}
+
+const Logout = ({ icon }: LogoutProps) => {
     const { logout } = useAuthActions();
     
     const handleLogout = () => {
@@ -14,7 +18,8 @@ const Logout = () => {
         onClick={handleLogout}
         className="flex items-center w-full px-4 py-3 rounded-lg hover:bg-gray-50 transition-colors text-left"
       >
-        <span className="ml-2">Logout</span>
+        {icon}
+        <span>Logout</span>
       </button>
     );
 };

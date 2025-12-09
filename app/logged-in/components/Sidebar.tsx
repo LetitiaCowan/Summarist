@@ -4,6 +4,16 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logout from "./Logout";
 import logo from "../../assets/logo.png";
+import { PiHouseLine } from "react-icons/pi";
+import { GoBookmark, GoQuestion } from "react-icons/go";
+import { BsPen } from "react-icons/bs";
+import { RxGear } from "react-icons/rx";
+import { MdOutlineBackspace } from "react-icons/md";
+
+
+
+
+
 
 const Sidebar = () => {
   const pathname = usePathname();
@@ -81,6 +91,7 @@ const Sidebar = () => {
               {isActive("/logged-in/for-you") && (
                 <span className="absolute left-0 top-0 bottom-0 w-1 bg-green-500 rounded-r-full"></span>
               )}
+              <PiHouseLine className="w-5 h-5 mr-2" />
               <span>For You</span>
             </Link>
           </li>
@@ -96,11 +107,13 @@ const Sidebar = () => {
               {isActive("/logged-in/library") && (
                 <span className="absolute left-0 top-0 bottom-0 w-1 bg-green-500 rounded-r-full"></span>
               )}
+              <GoBookmark className="w-5 h-5 mr-2" />
               <span>Library</span>
             </Link>
           </li>
           <li>
             <span className="flex items-center w-full px-4 py-3 rounded-lg hover:bg-gray-50 cursor-default">
+              <BsPen className="w-5 h-5 mr-2" />
               Highlights
             </span>
           </li>
@@ -120,16 +133,19 @@ const Sidebar = () => {
               {isActive("/logged-in/settings") && (
                 <span className="absolute left-0 top-0 bottom-0 w-1 bg-green-500 rounded-r-full"></span>
               )}
+              <RxGear className="w-5 h-5 mr-2" />
               <span>Settings</span>
             </Link>
           </li>
           <li>
             <span className="flex items-center w-full px-4 py-3 rounded-lg hover:bg-gray-50 cursor-default">
+              <GoQuestion className="w-5 h-5 mr-2" />
               Help and Support
             </span>
           </li>
+
           <li>
-            <Logout />
+            <Logout icon={<MdOutlineBackspace className="w-5 h-5 mr-2" />} />
           </li>
         </ul>
       </div>
