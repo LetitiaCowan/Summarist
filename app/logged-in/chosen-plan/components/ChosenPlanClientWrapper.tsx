@@ -5,13 +5,27 @@ import { AiFillAudio, AiFillFileText, AiFillBulb } from 'react-icons/ai';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 
+type BillingCycle = 'monthly' | 'yearly';
+type PlanType = 'basic' | 'premium';
+
+interface Plan {
+  name: string;
+  price: number;
+  period: string;
+  description: string;
+  savings?: string;
+  freeTrial?: string;
+  features: string[];
+  limitations: string[];
+}
+
 const ChosenPlanClientWrapper = () => {
     const router = useRouter()
-    const [billingCycle, setBillingCycle] = useState('monthly');
-    const [selectedPlan, setSelectedPlan] = useState('premium');
-    const [openAccordion, setOpenAccordion] = useState(null);
+    const [billingCycle, setBillingCycle] = useState<BillingCycle>('monthly');
+    const [selectedPlan, setSelectedPlan] = useState<PlanType>('premium');
+    const [openAccordion, setOpenAccordion] = useState<string | null>(null);
     
-    const plans = {
+    const plans: Record<BillingCycle, Record<PlanType, Plan>> = {
       monthly: {
         basic: {
           name: 'Basic',
@@ -93,7 +107,7 @@ const ChosenPlanClientWrapper = () => {
 
     const currentPlan = plans[billingCycle][selectedPlan];
 
-    const toggleAccordion = (item) => {
+    const toggleAccordion = (item: string) => {
       setOpenAccordion(openAccordion === item ? null : item);
     };
 
@@ -237,13 +251,13 @@ const ChosenPlanClientWrapper = () => {
             </div>
 
             <ul className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
-              {plans[billingCycle].basic.features.map((feature, index) => (
+              {plans[billingCycle].basic.features.map((feature: string, index: number) => (
                 <li key={index} className="flex items-start gap-2 sm:gap-3">
                   <BiCheck className="text-[#2bd97c] text-lg sm:text-xl flex-shrink-0 mt-0.5" />
                   <span className="text-sm sm:text-base text-[#394547]">{feature}</span>
                 </li>
               ))}
-              {plans[billingCycle].basic.limitations.map((limitation, index) => (
+              {plans[billingCycle].basic.limitations.map((limitation: string, index: number) => (
                 <li key={index} className="flex items-start gap-2 sm:gap-3">
                   <BiX className="text-gray-400 text-lg sm:text-xl flex-shrink-0 mt-0.5" />
                   <span className="text-sm sm:text-base text-gray-400">{limitation}</span>
@@ -306,7 +320,7 @@ const ChosenPlanClientWrapper = () => {
             </div>
 
             <ul className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
-              {plans[billingCycle].premium.features.map((feature, index) => (
+              {plans[billingCycle].premium.features.map((feature: string, index: number) => (
                 <li key={index} className="flex items-start gap-2 sm:gap-3">
                   <BiCheck className="text-[#2bd97c] text-lg sm:text-xl flex-shrink-0 mt-0.5" />
                   <span className="text-sm sm:text-base text-[#394547]">{feature}</span>
