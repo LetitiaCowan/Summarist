@@ -10,7 +10,7 @@ export interface Book {
     keyIdeas: number;
     type: string;
     status: string;
-    subscriptionRequred: boolean;
+    subscriptionRequired: boolean;
     summary: string;
     tags: string[];
     bookDescription: string;

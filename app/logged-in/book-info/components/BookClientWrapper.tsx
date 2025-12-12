@@ -17,12 +17,12 @@ const BookClientWrapper = () => {
   const id = searchParams.get("id");
   
   // Sanitize ID to prevent XSS and invalid characters
-  const sanitizeId = (id) => {
+  const sanitizeId = (id: string) => {
     if (!id) return null;
     return id.replace(/[^a-zA-Z0-9_-]/g, '');
   };
   
-  const sanitizedId = sanitizeId(id);
+  const sanitizedId = sanitizeId(id || "");
   const { findBookById, loading } = useBookDataContext();
   const book = sanitizedId ? findBookById(sanitizedId) : null;
 
@@ -35,7 +35,7 @@ const BookClientWrapper = () => {
     }
   };
 
-  const handleReadListen = (action) => {
+  const handleReadListen = (action: "read" | "listen") => {
     if (!book || !book.id) return;
 
     const requiresSubscription = book?.subscriptionRequired;
@@ -62,7 +62,7 @@ const BookClientWrapper = () => {
           book={book} 
           handleLogin={handleLogin} 
           handleReadListen={handleReadListen}
-          isGuest={isGuest}
+          isGuest={isGuest || false}
         />
         <BookInfoDescription book={book} />
       </AuthModalWrapper>

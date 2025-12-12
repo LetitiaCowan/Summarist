@@ -1,11 +1,12 @@
 import React from "react";
+import { Book } from "@/app/types/book";
 
-const BookInfoDescription = ({ book }) => {
+const BookInfoDescription = ({ book }: { book: Book }) => {
   return (
     <div className="px-4 md:px-0">
       <h2 className="text-lg sm:text-xl font-bold mt-4 md:mt-7">What's this about?</h2>
       <div className="flex flex-wrap gap-2 md:gap-4 items-center max-w-4xl py-3 md:py-5 font-bold">
-        {book.tags.map((tag) => (
+        {book.tags.map((tag: string) => (
           <span className="rounded bg-gray-200 px-3 py-2 md:p-4 text-xs md:text-sm" key={tag}>{tag}</span>
         ))}
       </div>

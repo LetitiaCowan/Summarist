@@ -4,6 +4,7 @@ import { FaRegStar, FaPlay, FaBookOpen, FaRegLightbulb } from "react-icons/fa";
 import { FiClock } from "react-icons/fi";
 import { AiOutlineAudio } from "react-icons/ai";
 import { useBookDataContext } from '@/app/providers/BookDataProvider';
+import { Book } from "@/app/types/book";
 
 
 const BookInfoHeader = ({
@@ -12,7 +13,7 @@ const BookInfoHeader = ({
   handleLogin,
   isGuest,
 }: {
-  book: any;
+  book: Book | null;
   handleReadListen: (action: "read" | "listen") => void;
   handleLogin: () => void;
   isGuest: boolean;
@@ -25,13 +26,14 @@ const BookInfoHeader = ({
       handleLogin();
       return;
     }
-    
+        
     // If user is logged in (not a guest), allow library operations
+    if (!book) return;
+
     if (isBookSaved(book.id)) {
       removeFromLibrary(book.id);
     } else {
-      addToLibrary(book);
-    }
+      addToLibrary(book);    }
   };
 
 
@@ -59,7 +61,7 @@ const BookInfoHeader = ({
             <div className="flex max-w-[300px] flex-wrap gap-2 md:gap-3 w-full">
               <span className="flex items-center gap-1 md:gap-2 bg-gray-100 text-gray-700 px-2 md:px-3 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-medium flex-1 min-w-[calc(50%-0.5rem)] md:min-w-0 md:flex-initial">
                 <FaRegStar className="text-yellow-500 flex-shrink-0" />
-                <span>{book?.averageRating} ({book?.totalRating} ratings)</span>
+                <span>{book?.averageRating} ({book?.totalRatings} ratings)</span>
               </span>
               <span className="flex items-center gap-1 md:gap-2 bg-gray-100 text-gray-700 px-2 md:px-3 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-medium flex-1 min-w-[calc(50%-0.5rem)] md:min-w-0 md:flex-initial">
                 <FiClock className="text-yellow-500 flex-shrink-0" />
@@ -96,8 +98,7 @@ const BookInfoHeader = ({
             {/* Add to library button */}
             <button onClick={handleToggleLibrary} className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium text-base md:text-lg transition-colors">
               <FaRegStar />
-              <span className="text-sm md:text-base">{isBookSaved(book.id) ? 'Remove from Library' : 'Add title to My Library'}</span>
-            </button>
+              <span className="text-sm md:text-base">{book && isBookSaved(book.id) ? 'Remove from Library' : 'Add title to My Library'}</span>            </button>
           </div>
         </div>
 
