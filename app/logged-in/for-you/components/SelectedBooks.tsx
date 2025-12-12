@@ -4,9 +4,10 @@ import axios from "axios";
 import { FaPlayCircle } from "react-icons/fa";
 import { FaCirclePause } from "react-icons/fa6";
 import SelectedBookSkeleton from "@/app/components/skeletons/SelectedBookSkeleton";
+import { Book } from "@/app/types/book";
 
 const SelectedBooks = () => {
-  const [selectedBook, setSelectedBook] = useState(null);
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [loading, setLoading] = useState(true);
 
